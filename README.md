@@ -21,4 +21,4 @@ An example to choose a table, order it, and insert a new row into a databse woul
 		db1.getQuestionMarks(order);
 		db1.insert();
 		
-At the moment you must create a ResultSet and call orderBy on the database, and then call the following methods in order for the insert method to work.
+At the moment you must create a ResultSet and call orderBy on the Database object, and then call the following methods in order for the insert method to work.

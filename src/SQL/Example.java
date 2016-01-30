@@ -2,11 +2,12 @@ package SQL;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 
 public class Example {
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws SQLException, ParseException {
 
 		Database db1 = new Database();
 		

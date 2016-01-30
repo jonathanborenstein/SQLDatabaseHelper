@@ -7,7 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 
 import javax.swing.JOptionPane;
 
@@ -20,8 +25,9 @@ public class Database {
 	private String column;
 	private PreparedStatement pst;
 	private Connection con;
-	
-	
+	private String monthString;
+
+
 	public void createConnection(String url, String user, String password) throws SQLException
 	{
 		con = DriverManager.getConnection(url, user, password);
@@ -82,7 +88,7 @@ public class Database {
 		return rs;
 	}
 
-	public void insert() throws SQLException
+	public void insert() throws SQLException, ParseException
 	{
 		String stm1 = "INSERT into " + table  + "(" + this.getColumnName(rs) + ") VALUES(" + this.returnMarks() + ")";
 		pst = con.prepareStatement(stm1);
@@ -127,7 +133,7 @@ public class Database {
 		return format;
 	}
 
-	public void getColumnTypeName(ResultSet rs) throws SQLException
+	public void getColumnTypeName(ResultSet rs) throws SQLException, ParseException
 	{
 		int j = 1;
 		String s = null;
@@ -136,7 +142,57 @@ public class Database {
 		{
 			array4.add(rs.getMetaData().getColumnTypeName(j));
 			System.out.println(array4.get(i));
-			if (array4.get(i).contains("char") || array4.get(i).contains("text"))
+			String type = array4.get(i);
+			int a;
+
+			switch (type) {
+			case "int4": 
+				s = JOptionPane.showInputDialog("Enter a number");
+				a = Integer.parseInt(s);
+				pst.setInt(j, a);
+				break;
+			
+			case "varchar":
+				s = JOptionPane.showInputDialog("Enter a string");
+				pst.setString(j, s);
+				break;
+				
+			case "bpchar":
+				s = JOptionPane.showInputDialog("Enter a string");
+				pst.setString(j, s);
+				break;
+				
+			case "text":
+				s = JOptionPane.showInputDialog("Enter a string");
+				pst.setString(j, s);
+				break;
+				
+			case "numeric": 
+				s = JOptionPane.showInputDialog("Enter a number");
+				a = Integer.parseInt(s);
+				pst.setInt(j, a);
+				break;
+				
+			case "bpnumeric": 
+				s = JOptionPane.showInputDialog("Enter a number");
+				a = Integer.parseInt(s);
+				pst.setInt(j, a);
+				break;
+	
+			/*case "date": 
+				s = JOptionPane.showInputDialog("Enter a date");
+				DateFormat dtFmt = null;
+				dtFmt = new SimpleDateFormat("yy/mm/dd");
+				long dtToday = dtFmt.parse(s).getTime();
+				pst.setLong(6, dtToday);
+				break;*/
+
+			}
+			j++;
+
+
+
+			/*if (array4.get(i).contains("char") || array4.get(i).contains("text"))
 			{	
 				s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
@@ -147,7 +203,7 @@ public class Database {
 				long a = Integer.parseInt(s);
 				pst.setLong(j, a);		
 			}
-			j++;
+			j++;*/
 		}
 
 	}

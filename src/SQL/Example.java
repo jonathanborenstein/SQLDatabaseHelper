@@ -17,19 +17,18 @@ public class Example {
 		
 		db1.createConnection(url, user, password);
 		
-		db1.chooseTable();
-		db1.chooseColumn(db1.getColumns());
-		ResultSet order = db1.orderBy();
-		db1.getColumnName(order);
-		db1.getQuestionMarks(order);
+		//orderBy method will allow you too choose column, table, and will order by column chosen
+		db1.orderBy();
 		db1.insert();
 		
-		db1.chooseTable();
-		db1.chooseColumn(db1.getColumns());
-		order = db1.orderBy();
-		db1.getColumnName(order);
-		db1.getQuestionMarks(order);
+		//Choose a new table
+		//Create a new ResultSet if you want to print the data as shown below
+		ResultSet order = db1.orderBy();
+		//set for loop to insert multiple entries into the table
+		for (int i =0; i < 3; i++){
 		db1.insert();
+		}
+
 		
 		int i = 1;
 		while (order.next()){

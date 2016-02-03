@@ -7,11 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 
 
 import javax.swing.JOptionPane;
@@ -21,19 +19,40 @@ public class Database {
 	private DatabaseMetaData dbmd;
 	private ResultSet tables;
 	private ResultSet rs;
+	private ResultSet columns;
 	private String table;
 	private String column;
 	private PreparedStatement pst;
 	private Connection con;
-	private String monthString;
 
 
 	public void createConnection(String url, String user, String password) throws SQLException
 	{
 		con = DriverManager.getConnection(url, user, password);
 	}
+	
+	public void insert() throws SQLException, ParseException
+	{
+		String stm1 = "INSERT into " + table  + "(" + this.getColumnName(rs) + ") VALUES(" + this.returnMarks() + ")";
+		pst = con.prepareStatement(stm1);
+		this.getColumnTypeName(rs);
+		pst.executeUpdate();
+		//pst.clearParameters();
 
-	public String chooseTable() throws SQLException
+	}
+	
+	public ResultSet orderBy() throws SQLException
+	{
+		this.chooseTable();
+		this.chooseColumn();
+		Statement stmt = null;
+		stmt = con.createStatement();
+		String sql = "SELECT * FROM " + table + " ORDER BY " + column;
+		rs = stmt.executeQuery(sql);
+		return rs;
+	}
+
+	private String chooseTable() throws SQLException
 	{
 		String array1[] = new String[10];
 		int i = 0;
@@ -52,13 +71,14 @@ public class Database {
 
 	}
 
-	public String chooseColumn(ResultSet rs) throws SQLException
+	private String chooseColumn() throws SQLException
 	{
-		String array2[] = new String[rs.getMetaData().getColumnCount()];
+		this.getColumns();
+		String array2[] = new String[columns.getMetaData().getColumnCount()];
 		int i = 1;
-		for (int j = 0; j < rs.getMetaData().getColumnCount(); j++)
+		for (int j = 0; j < columns.getMetaData().getColumnCount(); j++)
 		{
-			array2[j] = rs.getMetaData().getColumnName(i);
+			array2[j] = columns.getMetaData().getColumnName(i);
 			i++;
 
 		}
@@ -70,34 +90,16 @@ public class Database {
 		return column;
 	}
 
-	public ResultSet getColumns() throws SQLException
+	private ResultSet getColumns() throws SQLException
 	{
 		Statement stmt = null;
 		stmt = con.createStatement();
 		String sql = "SELECT * FROM " + table;
-		ResultSet rs = stmt.executeQuery(sql);
-		return rs;
+		columns = stmt.executeQuery(sql);
+		return columns;
 	}
 
-	public ResultSet orderBy() throws SQLException
-	{
-		Statement stmt = null;
-		stmt = con.createStatement();
-		String sql = "SELECT * FROM " + table + " ORDER BY " + column;
-		rs = stmt.executeQuery(sql);
-		return rs;
-	}
-
-	public void insert() throws SQLException, ParseException
-	{
-		String stm1 = "INSERT into " + table  + "(" + this.getColumnName(rs) + ") VALUES(" + this.returnMarks() + ")";
-		pst = con.prepareStatement(stm1);
-		this.getColumnTypeName(rs);
-		pst.executeUpdate();
-
-	}
-
-	public String returnMarks() throws SQLException
+	private String returnMarks() throws SQLException
 	{
 		return this.getQuestionMarks(rs).toString()
 				.replace("[", "")
@@ -105,7 +107,7 @@ public class Database {
 				.trim(); 
 	}
 
-	public ArrayList<String> getQuestionMarks(ResultSet rs) throws SQLException
+	private ArrayList<String> getQuestionMarks(ResultSet rs) throws SQLException
 	{
 		ArrayList<String> array3 = new ArrayList<String>();
 		for(int i =0; i < rs.getMetaData().getColumnCount(); i++)
@@ -115,7 +117,7 @@ public class Database {
 		return array3;
 	}
 
-	public String getColumnName(ResultSet rs) throws SQLException
+	private String getColumnName(ResultSet rs) throws SQLException
 	{
 
 		ArrayList<String> array2 = new ArrayList<String>();
@@ -133,7 +135,7 @@ public class Database {
 		return format;
 	}
 
-	public void getColumnTypeName(ResultSet rs) throws SQLException, ParseException
+	private void getColumnTypeName(ResultSet rs) throws SQLException, ParseException
 	{
 		int j = 1;
 		String s = null;
@@ -144,6 +146,8 @@ public class Database {
 			System.out.println(array4.get(i));
 			String type = array4.get(i);
 			int a;
+			double d;
+			boolean b;
 
 			switch (type) {
 			case "int4": 
@@ -179,34 +183,21 @@ public class Database {
 				pst.setInt(j, a);
 				break;
 	
-			/*case "date": 
-				s = JOptionPane.showInputDialog("Enter a date");
-				DateFormat dtFmt = null;
-				dtFmt = new SimpleDateFormat("yy/mm/dd");
-				long dtToday = dtFmt.parse(s).getTime();
-				pst.setLong(6, dtToday);
-				break;*/
+			case "float8": 
+				s = JOptionPane.showInputDialog("Enter a double");
+				d = Double.parseDouble(s);
+				pst.setDouble(j, d);
+				break;
+				
+			case "bool": 
+				s = JOptionPane.showInputDialog("Enter true or false");
+				b = Boolean.parseBoolean(s);
+				pst.setBoolean(j, b);; 
+				break;
 
 			}
 			j++;
-
-
-
-			/*if (array4.get(i).contains("char") || array4.get(i).contains("text"))
-			{	
-				s = JOptionPane.showInputDialog("Enter a string");
-				pst.setString(j, s);
-			}
-			else
-			{
-				s = JOptionPane.showInputDialog("Enter a number");
-				long a = Integer.parseInt(s);
-				pst.setLong(j, a);		
-			}
-			j++;*/
 		}
-
 	}
-
 }
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 
 
+
 import javax.swing.JOptionPane;
 
 public class Database {
@@ -30,6 +31,23 @@ public class Database {
 	{
 		con = DriverManager.getConnection(url, user, password);
 	}
+
+
+	public void createTable(int columns) throws SQLException
+	{
+		String name = JOptionPane.showInputDialog("Enter a table name");
+		String create = "";
+		for (int i = 0; i < columns; i++){
+			create = create + JOptionPane.showInputDialog("Enter a column name") + " " + 
+					JOptionPane.showInputDialog("Enter a data type") + ", ";
+		}
+		int last = create.lastIndexOf(",");
+		create = create.substring(0, last);
+		create = "(" + create + ")";
+		String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
+		pst = con.prepareStatement(sql);
+		pst.execute();
+	}
 	
 	public void insert() throws SQLException, ParseException
 	{
@@ -37,10 +55,8 @@ public class Database {
 		pst = con.prepareStatement(stm1);
 		this.getColumnTypeName(rs);
 		pst.executeUpdate();
-		//pst.clearParameters();
-
 	}
-	
+
 	public ResultSet orderBy() throws SQLException
 	{
 		this.chooseTable();
@@ -54,7 +70,7 @@ public class Database {
 
 	private String chooseTable() throws SQLException
 	{
-		String array1[] = new String[10];
+		String array1[] = new String[20];
 		int i = 0;
 		dbmd = con.getMetaData();
 		tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" });
@@ -155,40 +171,40 @@ public class Database {
 				a = Integer.parseInt(s);
 				pst.setInt(j, a);
 				break;
-			
+
 			case "varchar":
 				s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
 				break;
-				
+
 			case "bpchar":
 				s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
 				break;
-				
+
 			case "text":
 				s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
 				break;
-				
+
 			case "numeric": 
 				s = JOptionPane.showInputDialog("Enter a number");
 				a = Integer.parseInt(s);
 				pst.setInt(j, a);
 				break;
-				
+
 			case "bpnumeric": 
 				s = JOptionPane.showInputDialog("Enter a number");
 				a = Integer.parseInt(s);
 				pst.setInt(j, a);
 				break;
-	
+
 			case "float8": 
 				s = JOptionPane.showInputDialog("Enter a double");
 				d = Double.parseDouble(s);
 				pst.setDouble(j, d);
 				break;
-				
+
 			case "bool": 
 				s = JOptionPane.showInputDialog("Enter true or false");
 				b = Boolean.parseBoolean(s);

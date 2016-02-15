@@ -39,16 +39,31 @@ public class Database {
 		String create = "";
 		for (int i = 0; i < columns; i++){
 			create = create + JOptionPane.showInputDialog("Enter a column name") + " " + 
-					JOptionPane.showInputDialog("Enter a data type") + ", ";
+					JOptionPane.showInputDialog("Enter a data type") + " " + this.chooseNull() + ", ";
 		}
-		int last = create.lastIndexOf(",");
-		create = create.substring(0, last);
-		create = "(" + create + ")";
-		String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
-		pst = con.prepareStatement(sql);
-		pst.execute();
+
+		if (this.choosePK() == 0)
+		{
+			String pk = "PRIMARY KEY(" + JOptionPane.showInputDialog("Enter a pk") + ")";
+			create = create + pk;
+			create = "(" + create + ")";
+			String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
+			pst = con.prepareStatement(sql);
+			System.out.println(sql);
+			pst.execute();
+		}
+		else
+		{
+			int last = create.lastIndexOf(",");
+			create = create.substring(0, last);
+			create = "(" + create + ")";
+			String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
+			pst = con.prepareStatement(sql);
+			System.out.println(sql);
+			pst.execute();
+		}
 	}
-	
+
 	public void insert() throws SQLException, ParseException
 	{
 		String stm1 = "INSERT into " + table  + "(" + this.getColumnName(rs) + ") VALUES(" + this.returnMarks() + ")";
@@ -70,9 +85,17 @@ public class Database {
 
 	private String chooseTable() throws SQLException
 	{
-		String array1[] = new String[20];
 		int i = 0;
+		int j = 0;
 		dbmd = con.getMetaData();
+		tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" });
+
+		while (tables.next()) {
+			j++;
+		}
+
+		String array1[] = new String[j];
+
 		tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" });
 		while (tables.next()) {
 			String table = tables.getString("TABLE_NAME");
@@ -87,6 +110,44 @@ public class Database {
 
 	}
 
+
+	private String chooseNull()
+	{
+		String nullArray[] = {"null", "not null"};
+		String choice = "";
+
+		int a = JOptionPane.showOptionDialog(null,
+				"Choose null or not null",
+				null,
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				nullArray,
+				nullArray[0]);
+
+		if (a == 0)
+			choice = "null";
+		else
+			choice = "not null";
+
+		return choice;
+	}
+
+	private int choosePK()
+	{
+		String nullArray[] = {"YES", "NO"};
+		int a = JOptionPane.showOptionDialog(null,
+				"Add a Primary Key?",
+				null,
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				nullArray,
+				nullArray[0]);
+
+		return a;
+	}
+	
 	private String chooseColumn() throws SQLException
 	{
 		this.getColumns();

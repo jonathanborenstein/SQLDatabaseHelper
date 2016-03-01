@@ -11,8 +11,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 
-
-
 import javax.swing.JOptionPane;
 
 public class Database {
@@ -42,26 +40,41 @@ public class Database {
 					JOptionPane.showInputDialog("Enter a data type") + " " + this.chooseNull() + ", ";
 		}
 
-		if (this.choosePK() == 0)
-		{
-			String pk = "PRIMARY KEY(" + JOptionPane.showInputDialog("Enter a pk") + ")";
-			create = create + pk;
-			create = "(" + create + ")";
-			String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
-			pst = con.prepareStatement(sql);
-			System.out.println(sql);
-			pst.execute();
-		}
-		else
+		int choosePK = this.choosePK();
+		if (choosePK == 0)
 		{
 			int last = create.lastIndexOf(",");
 			create = create.substring(0, last);
-			create = "(" + create + ")";
-			String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
-			pst = con.prepareStatement(sql);
-			System.out.println(sql);
-			pst.execute();
+			String pk = " ,PRIMARY KEY(" + JOptionPane.showInputDialog("Enter a pk") + ")";
+			create = create + pk;
 		}
+
+		String comma = "";
+
+		int chooseFK = this.chooseFK();
+		if (chooseFK == 0){
+
+			if (choosePK==1){
+				comma = "";
+			}
+			else
+				comma = ",";
+
+			String fk = comma + "FOREIGN KEY(" + JOptionPane.showInputDialog("Enter a fk") + ")" + " REFERENCES " + 
+					this.chooseTableFK() + "(" + this.chooseColumnFK() + ")";
+			create = create + fk;
+		}
+
+		if (chooseFK == 1 && choosePK == 1){
+			int last = create.lastIndexOf(",");
+			create = create.substring(0, last);
+		}
+
+		create = "(" + create + ")";
+		String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
+		pst = con.prepareStatement(sql);
+		System.out.println(sql);
+		pst.execute();
 	}
 
 	public void insert() throws SQLException, ParseException
@@ -110,6 +123,33 @@ public class Database {
 
 	}
 
+	private String chooseTableFK() throws SQLException
+	{
+		int i = 0;
+		int j = 0;
+		dbmd = con.getMetaData();
+		tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" });
+
+		while (tables.next()) {
+			j++;
+		}
+
+		String array1[] = new String[j];
+
+		tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" });
+		while (tables.next()) {
+			String table = tables.getString("TABLE_NAME");
+			array1[i] = table;
+			i++;
+		}
+		table = (String) JOptionPane.showInputDialog(null,
+				"Choose a table to reference", "Input",
+				JOptionPane.INFORMATION_MESSAGE, null,
+				array1, array1[0]);
+		return table;
+
+	}
+
 
 	private String chooseNull()
 	{
@@ -147,7 +187,23 @@ public class Database {
 
 		return a;
 	}
-	
+
+
+	private int chooseFK()
+	{
+		String nullArray[] = {"YES", "NO"};
+		int a = JOptionPane.showOptionDialog(null,
+				"Add a Foreign Key?",
+				null,
+				JOptionPane.DEFAULT_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				nullArray,
+				nullArray[0]);
+
+		return a;
+	}
+
 	private String chooseColumn() throws SQLException
 	{
 		this.getColumns();
@@ -161,6 +217,25 @@ public class Database {
 		}
 		column = (String) JOptionPane.showInputDialog(null,
 				"Choose a column to order by", "Input",
+				JOptionPane.INFORMATION_MESSAGE, null,
+				array2, array2[0]);
+
+		return column;
+	}
+
+	private String chooseColumnFK() throws SQLException
+	{
+		this.getColumns();
+		String array2[] = new String[columns.getMetaData().getColumnCount()];
+		int i = 1;
+		for (int j = 0; j < columns.getMetaData().getColumnCount(); j++)
+		{
+			array2[j] = columns.getMetaData().getColumnName(i);
+			i++;
+
+		}
+		column = (String) JOptionPane.showInputDialog(null,
+				"Choose a column to reference", "Input",
 				JOptionPane.INFORMATION_MESSAGE, null,
 				array2, array2[0]);
 

@@ -10,8 +10,9 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 public class Database {
 
@@ -21,20 +22,65 @@ public class Database {
 	private ResultSet columns;
 	private String table;
 	private String column;
+	private String column1;
+	private String nullField;
+	private String dataType;
 	private PreparedStatement pst;
 	private Connection con;
+	private String name;
+	private String type1;
+	private String input;
 
 
 	public void createConnection(String url, String user, String password) throws SQLException
 	{
 		con = DriverManager.getConnection(url, user, password);
 	}
-
-
-	public void createTable(int columns) throws SQLException
+	
+	public String getName()
 	{
-		String name = JOptionPane.showInputDialog("Enter a table name");
-		String create = "";
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public String getDatatype()
+	{
+		return dataType;
+	}
+	
+	public void setDataType(String dataType)
+	{
+		this.dataType = dataType;
+	}
+	
+	public String getCol()
+	{
+		return column1;
+	}
+	
+	public void setCol(String col)
+	{
+		this.column1 = col;
+	}
+	
+	public String getNull()
+	{
+		return nullField;
+	}
+	
+	public void setNull(String nullField)
+	{
+		this.nullField = nullField;
+	}
+	
+	public void createTable() throws SQLException
+	{
+		
+		/*String create = "";
 		for (int i = 0; i < columns; i++){
 			create = create + JOptionPane.showInputDialog("Enter a column name") + " " + 
 					JOptionPane.showInputDialog("Enter a data type") + " " + this.chooseNull() + ", ";
@@ -68,10 +114,10 @@ public class Database {
 		if (chooseFK == 1 && choosePK == 1){
 			int last = create.lastIndexOf(",");
 			create = create.substring(0, last);
-		}
+		}*/
 
-		create = "(" + create + ")";
-		String sql = "CREATE TABLE IF NOT EXISTS " + name + " " + create;
+		//create = "(" + create + ")";
+		String sql = "CREATE TABLE IF NOT EXISTS " + this.name + "(" + this.column1 + " " + this.dataType + " " + this.nullField + ")";
 		pst = con.prepareStatement(sql);
 		System.out.println(sql);
 		pst.execute();
@@ -79,7 +125,9 @@ public class Database {
 
 	public void insert() throws SQLException, ParseException
 	{
+		
 		String stm1 = "INSERT into " + table  + "(" + this.getColumnName(rs) + ") VALUES(" + this.returnMarks() + ")";
+		System.out.println(stm1);
 		pst = con.prepareStatement(stm1);
 		this.getColumnTypeName(rs);
 		pst.executeUpdate();
@@ -92,11 +140,22 @@ public class Database {
 		Statement stmt = null;
 		stmt = con.createStatement();
 		String sql = "SELECT * FROM " + table + " ORDER BY " + column;
+		System.out.println(sql);
 		rs = stmt.executeQuery(sql);
 		return rs;
 	}
+	
+	public void setTable(String table)
+	{
+		this.table = table;
+	}
 
-	private String chooseTable() throws SQLException
+	public void setColumn(String column)
+	{
+		this.column = column;
+	} 
+	
+	public DefaultListModel chooseTable() throws SQLException
 	{
 		int i = 0;
 		int j = 0;
@@ -107,19 +166,20 @@ public class Database {
 			j++;
 		}
 
-		String array1[] = new String[j];
+		DefaultListModel array1 = new DefaultListModel();
 
 		tables = dbmd.getTables(null, null, "%", new String[] { "TABLE" });
 		while (tables.next()) {
 			String table = tables.getString("TABLE_NAME");
-			array1[i] = table;
+			array1.addElement(table);
 			i++;
 		}
-		table = (String) JOptionPane.showInputDialog(null,
+		/*table = (String) JOptionPane.showInputDialog(null,
 				"Choose a table", "Input",
 				JOptionPane.INFORMATION_MESSAGE, null,
-				array1, array1[0]);
-		return table;
+				array1, array1[0]);*/
+		System.out.println(array1.toString());
+		return array1;
 
 	}
 
@@ -204,23 +264,26 @@ public class Database {
 		return a;
 	}
 
-	private String chooseColumn() throws SQLException
+	public DefaultListModel chooseColumn() throws SQLException
 	{
 		this.getColumns();
 		String array2[] = new String[columns.getMetaData().getColumnCount()];
 		int i = 1;
+		
+		DefaultListModel array1 = new DefaultListModel();
+
 		for (int j = 0; j < columns.getMetaData().getColumnCount(); j++)
 		{
-			array2[j] = columns.getMetaData().getColumnName(i);
+			array1.addElement(columns.getMetaData().getColumnName(i));
 			i++;
 
 		}
-		column = (String) JOptionPane.showInputDialog(null,
+		/*column = (String) JOptionPane.showInputDialog(null,
 				"Choose a column to order by", "Input",
 				JOptionPane.INFORMATION_MESSAGE, null,
-				array2, array2[0]);
+				array2, array2[0]);*/
 
-		return column;
+		return array1;
 	}
 
 	private String chooseColumnFK() throws SQLException
@@ -302,16 +365,21 @@ public class Database {
 			boolean b;
 
 			switch (type) {
-			case "int4": 
-				s = JOptionPane.showInputDialog("Enter a number");
+			case "INT": 
+				this.setType(type);
+				s = this.getInput();
+				//s = JOptionPane.showInputDialog("Enter a number");
 				a = Integer.parseInt(s);
 				pst.setInt(j, a);
 				break;
 
-			case "varchar":
-				s = JOptionPane.showInputDialog("Enter a string");
+			case "VARCHAR":
+				this.setType(type);
+				s = this.getInput();
+				//s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
 				break;
+				
 
 			case "bpchar":
 				s = JOptionPane.showInputDialog("Enter a string");
@@ -350,6 +418,24 @@ public class Database {
 			}
 			j++;
 		}
+	}
+	
+	public void setInput(String a) {
+		this.input = a;
+	}
+	
+	public String getInput() {
+		return input;
+	}
+
+	public void setType(String type)
+	{
+		type1 = type;
+	}
+	
+	public String getType()
+	{
+		return type1;
 	}
 }
 

@@ -23,4 +23,10 @@ public class TextPanel extends JPanel {
 	public void appendText(String text) {
 		textArea.append(text);
 	}
+	
+	public void clearText() {
+		textArea.setText("");
+	}
+	
+	
 }

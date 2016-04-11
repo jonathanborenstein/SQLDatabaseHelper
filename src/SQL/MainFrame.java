@@ -31,19 +31,15 @@ public class MainFrame extends JFrame {
 				db = new Database();
 				final String url= e.getUrl();
 				final String user = e.getUser();
-				final String password = e.getPassword();
+				final String password = e.getPass();
 				try {
 					db.createConnection(url, user, password);
 					formPanel.setModelA(db.chooseTable());
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-
-
 			}
 		});
-
-
 
 		create.setFormListener(new FormListener() {
 			public void formEventOccurred(FormEvent e) {
@@ -111,6 +107,12 @@ public class MainFrame extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+			}
+		});
+		
+		formPanel.setFormListener4(new FormListener(){
+			public void formEventOccurred(FormEvent e) {
+				textPanel.clearText();
 			}
 		});
 

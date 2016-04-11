@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
@@ -23,8 +24,9 @@ public class Toolbar extends JPanel implements ActionListener {
 	private JTextField userText;
 	private JTextField passwordText;
 	
-	
 	private FormListener formListener;
+
+	private JPasswordField passwordField;
 	
 	public Toolbar() {
 		setBorder(BorderFactory.createEtchedBorder());
@@ -41,22 +43,25 @@ public class Toolbar extends JPanel implements ActionListener {
 		userText = new JTextField(25);
 		passwordText = new JTextField(25);
 		
+		
+		passwordField = new JPasswordField(25);
+		
+		
 		add(url);
 		add(urlText);
 		add(user);
 		add(userText);
 		add(password);
-		add(passwordText);
-		
+		//add(passwordText);
+		add(passwordField);
 		add(connect);
 		
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String url = urlText.getText();
 				String user = userText.getText();
-				String password = passwordText.getText();
+				char[] password = passwordField.getPassword();
 			
-				
 				FormEvent ev = new FormEvent(this, url, user, password);
 				
 				if(formListener != null) {

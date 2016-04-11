@@ -22,13 +22,15 @@ public class FormPanel extends JPanel {
 	private FormListener formListener;
 	private FormListener formListener2;
 	private FormListener formListener3;
-	
+	private FormListener formListener4;
+
 	
 	private JList tableList;
+	
 	private JButton insertBtn;
 	private JButton insert2Btn;
 	private JButton refreshBtn;
-	private JList combo;
+	private JButton clearPanel;
 	
 	
 	public FormPanel() {
@@ -38,27 +40,21 @@ public class FormPanel extends JPanel {
 		
 	
 		tableList = new JList();
-		combo = new JList();
 		
 		tableList.setPreferredSize(new Dimension(100, 400));
 		tableList.setBorder(BorderFactory.createEtchedBorder());
 		tableList.setSelectedIndex(1);
 		
-		combo.setPreferredSize(new Dimension(100, 400));
-		combo.setBorder(BorderFactory.createEtchedBorder());
-		combo.setSelectedIndex(1);
-		
-		
+
 		insertBtn = new JButton("Select Table");
 		insert2Btn = new JButton("Display Table");
-		refreshBtn = new JButton("Refresh");
+		clearPanel = new JButton("Clear Text Panel");
+		refreshBtn = new JButton("Refresh Table List");
 		
 		
 		insertBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String tableName = (String) tableList.getSelectedValue();
-			
-				
 				FormEvent ev = new FormEvent(this, tableName);
 				
 				if(formListener != null) {
@@ -70,8 +66,6 @@ public class FormPanel extends JPanel {
 		insert2Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String tableName = (String) tableList.getSelectedValue();
-			
-
 				FormEvent ev = new FormEvent(this, tableName);
 				
 				if(formListener2 != null) {
@@ -80,11 +74,20 @@ public class FormPanel extends JPanel {
 			}
 		});
 		
+		clearPanel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tableName = (String) tableList.getSelectedValue();
+				FormEvent ev = new FormEvent(this, tableName);
+				
+				if(formListener4 != null) {
+					formListener4.formEventOccurred(ev);
+				}
+			}
+		});
+		
 		refreshBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String tableName = (String) combo.getSelectedValue();
-			
-
+				String tableName = (String) tableList.getSelectedValue();
 				FormEvent ev = new FormEvent(this, tableName);
 				
 				if(formListener3 != null) {
@@ -102,20 +105,14 @@ public class FormPanel extends JPanel {
 		add(insertBtn);
 		add(insert2Btn);
 		add(refreshBtn);
-		//add(combo);
-		
-		
+		add(clearPanel);
+
 
 	}
 	
 	public void setModelA(DefaultListModel model)
 	{
 		tableList.setModel(model);
-	}
-	
-	public void setModelB(DefaultListModel model)
-	{
-		combo.setModel(model);
 	}
 	
 	public void setFormListener(FormListener listener) {
@@ -136,5 +133,9 @@ public class FormPanel extends JPanel {
 		
 	}
 	
+	public void setFormListener4(FormListener listener) {
+		this.formListener4 = listener;
+		
+	}
 	
 }

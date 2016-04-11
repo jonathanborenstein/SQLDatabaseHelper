@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 
 public class Database {
 
@@ -27,10 +26,9 @@ public class Database {
 	private String dataType;
 	private PreparedStatement pst;
 	private Connection con;
-	private String name;
+	private String name; 
 	private String type1;
 	private String input;
-
 
 	public void createConnection(String url, String user, String password) throws SQLException
 	{
@@ -118,6 +116,14 @@ public class Database {
 
 		//create = "(" + create + ")";
 		String sql = "CREATE TABLE IF NOT EXISTS " + this.name + "(" + this.column1 + " " + this.dataType + " " + this.nullField + ")";
+		pst = con.prepareStatement(sql);
+		System.out.println(sql);
+		pst.execute();
+	}
+	
+	public void addColumn() throws SQLException
+	{
+		String sql = "ALTER TABLE " + this.name + " ADD " + this.column1 + " " + this.dataType + " " + this.nullField;
 		pst = con.prepareStatement(sql);
 		System.out.println(sql);
 		pst.execute();
@@ -367,16 +373,17 @@ public class Database {
 			switch (type) {
 			case "INT": 
 				this.setType(type);
-				s = this.getInput();
-				//s = JOptionPane.showInputDialog("Enter a number");
+				//s = this.getInput();
+				s = JOptionPane.showInputDialog("Enter a number");
 				a = Integer.parseInt(s);
 				pst.setInt(j, a);
 				break;
 
 			case "VARCHAR":
-				this.setType(type);
-				s = this.getInput();
-				//s = JOptionPane.showInputDialog("Enter a string");
+				//this.setType(type);
+				//isTrue = true;
+				//s = this.getInput();
+				s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
 				break;
 				
@@ -409,7 +416,7 @@ public class Database {
 				pst.setDouble(j, d);
 				break;
 
-			case "bool": 
+			case "BOOLEAN": 
 				s = JOptionPane.showInputDialog("Enter true or false");
 				b = Boolean.parseBoolean(s);
 				pst.setBoolean(j, b);; 
@@ -424,7 +431,7 @@ public class Database {
 		this.input = a;
 	}
 	
-	public String getInput() {
+	public String getInput() { 
 		return input;
 	}
 

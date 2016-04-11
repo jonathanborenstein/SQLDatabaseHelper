@@ -25,11 +25,6 @@ public class MainFrame extends JFrame {
 		formPanel = new FormPanel();
 		create = new CreateTable();
 
-		toolbar.setStringListener(new StringListener() {
-			public void textEmitted(String text) {
-				textPanel.appendText(text);
-			}
-		});
 
 		toolbar.setFormListener(new FormListener(){
 			public void formEventOccurred(FormEvent e) {

@@ -23,8 +23,6 @@ public class Toolbar extends JPanel implements ActionListener {
 	private JTextField userText;
 	private JTextField passwordText;
 	
-	private StringListener textListener;
-	private StringListener textListener1;
 	
 	private FormListener formListener;
 	
@@ -74,13 +72,6 @@ public class Toolbar extends JPanel implements ActionListener {
 	}
 	
 	
-	public void setStringListener(StringListener listener) {
-		this.textListener = listener;
-	}
-	
-	public void setStringListener1(StringListener listener) {
-		this.textListener1 = listener;
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

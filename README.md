@@ -1,27 +1,8 @@
 # SQLDatabaseHelper
 SQL Database Helper
 
-This is a program used to help modify and view tables in an SQL databse, although more features will be added shortly.
+The program has been updated and now features a GUI. The program is still a work in progress, although the same functionality will exist as I update it.
 
-An example to choose a table, order it, and insert a new row into a databse would look like this (as seen in Example.java):
-  
-		Database db1 = new Database();
-		
-		final String url= "jdbc:postgresql://localhost/Tweets";
-		final String user = "postgres";
-		final String password = "postgres";
-		
-		db1.createConnection(url, user, password);
-		
-		//orderBy method will allow you too choose column, table, and will order by column chosen
-		db1.orderBy();
-		db1.insert();
-		
-		//Choose a new table
-		db1.orderBy();
-		//set for loop to insert multiple entries into the table
-		for (int i =0; i < 3; i++){
-		db1.insert();
-		}
-		
-The only method you must call is orderBy in order to choose a table and column (to order by). The other methods are now private to the Database class.
+Right now all you have to do is clone the project, and connect to a database, and you will see a Create Table panel on the right side, and an add column feature below it. On the left side you will see a list of tables which you can select and then display the content.
+
+One thing that is needed is a jdbc driver specific to the Database you use in order to for a connection.

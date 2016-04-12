@@ -27,52 +27,11 @@ public class Database {
 	private PreparedStatement pst;
 	private Connection con;
 	private String name; 
-	private String type1;
-	private String input;
+
 
 	public void createConnection(String url, String user, String password) throws SQLException
 	{
 		con = DriverManager.getConnection(url, user, password);
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	public String getDatatype()
-	{
-		return dataType;
-	}
-	
-	public void setDataType(String dataType)
-	{
-		this.dataType = dataType;
-	}
-	
-	public String getCol()
-	{
-		return column1;
-	}
-	
-	public void setCol(String col)
-	{
-		this.column1 = col;
-	}
-	
-	public String getNull()
-	{
-		return nullField;
-	}
-	
-	public void setNull(String nullField)
-	{
-		this.nullField = nullField;
 	}
 	
 	public void createTable() throws SQLException
@@ -196,8 +155,48 @@ public class Database {
 		return array1;
 
 	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public String getDatatype()
+	{
+		return dataType;
+	}
+	
+	public void setDataType(String dataType)
+	{
+		this.dataType = dataType;
+	}
+	
+	public String getCol()
+	{
+		return column1;
+	}
+	
+	public void setCol(String col)
+	{
+		this.column1 = col;
+	}
+	
+	public String getNull()
+	{
+		return nullField;
+	}
+	
+	public void setNull(String nullField)
+	{
+		this.nullField = nullField;
+	}
 
-	private String chooseTableFK() throws SQLException
+	/*private String chooseTableFK() throws SQLException
 	{
 		int i = 0;
 		int j = 0;
@@ -276,7 +275,7 @@ public class Database {
 				nullArray[0]);
 
 		return a;
-	}
+	}*/
 
 	public DefaultListModel chooseColumn() throws SQLException
 	{
@@ -300,7 +299,7 @@ public class Database {
 		return array1;
 	}
 
-	private String chooseColumnFK() throws SQLException
+	/*private String chooseColumnFK() throws SQLException
 	{
 		this.getColumns();
 		String array2[] = new String[columns.getMetaData().getColumnCount()];
@@ -317,7 +316,7 @@ public class Database {
 				array2, array2[0]);
 
 		return column;
-	}
+	}*/
 
 	private ResultSet getColumns() throws SQLException
 	{
@@ -364,6 +363,18 @@ public class Database {
 		return format;
 	}
 
+	public void getTypes() throws SQLException
+	{
+		int j = 1;
+		String s = null;
+		ArrayList<String> array4 = new ArrayList<String>();
+		for(int i =0; i < rs.getMetaData().getColumnCount(); i++)
+		{
+			array4.add(rs.getMetaData().getColumnTypeName(j));
+			System.out.println(array4.get(i));
+		}
+	}
+	
 	private void getColumnTypeName(ResultSet rs) throws SQLException, ParseException
 	{
 		int j = 1;
@@ -380,17 +391,12 @@ public class Database {
 
 			switch (type) {
 			case "INT": 
-				this.setType(type);
-				//s = this.getInput();
 				s = JOptionPane.showInputDialog("Enter a number");
 				a = Integer.parseInt(s);
 				pst.setInt(j, a);
 				break;
 
 			case "VARCHAR":
-				//this.setType(type);
-				//isTrue = true;
-				//s = this.getInput();
 				s = JOptionPane.showInputDialog("Enter a string");
 				pst.setString(j, s);
 				break;
@@ -433,24 +439,6 @@ public class Database {
 			}
 			j++;
 		}
-	}
-	
-	public void setInput(String a) {
-		this.input = a;
-	}
-	
-	public String getInput() { 
-		return input;
-	}
-
-	public void setType(String type)
-	{
-		type1 = type;
-	}
-	
-	public String getType()
-	{
-		return type1;
 	}
 }
 

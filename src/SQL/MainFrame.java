@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
 				try {
 					db.setColumn(e.getTableName());
 					ResultSet order = db.orderBy();
-					System.out.println(db.getType());
+					
 					while (order.next()){
 
 						String row = "";

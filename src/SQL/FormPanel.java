@@ -41,7 +41,7 @@ public class FormPanel extends JPanel {
 	
 		tableList = new JList();
 		
-		tableList.setPreferredSize(new Dimension(100, 400));
+		tableList.setPreferredSize(new Dimension(100, 500));
 		tableList.setBorder(BorderFactory.createEtchedBorder());
 		tableList.setSelectedIndex(1);
 		

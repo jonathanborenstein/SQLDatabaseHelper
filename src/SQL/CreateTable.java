@@ -42,6 +42,9 @@ public class CreateTable extends JPanel {
 	private JButton addColumn;
 	private JLabel name2;
 	private JTextField nameFieldC;
+	
+	private JLabel name3;
+	private JTextField nameFieldD;
 	private JLabel pKeyLabel;
 	private JTextField pKeyField;
 	private JButton pKeyBtn;
@@ -56,6 +59,7 @@ public class CreateTable extends JPanel {
 		
 		name = new JLabel("Table Name: ");
 		name2 = new JLabel(" Table Name: ");
+		name3 = new JLabel("    Table Name: ");
 		dataType= new JLabel("Datatype: ");
 		column = new JLabel("Column: ");
 		nullLabel = new JLabel("Null or Not Null: "); 
@@ -71,11 +75,10 @@ public class CreateTable extends JPanel {
 		
 		nameFieldB = new JTextField(15);
 		nameFieldC = new JTextField(15);
+		nameFieldD = new JTextField(15);
 		dataTypeField = new JTextField(15);
 		columnField = new JTextField(15);
 		nullField = new JTextField(15);
-		
-		
 		
 		dataTypeField2 = new JTextField(15);
 		columnField2 = new JTextField(15);
@@ -114,6 +117,7 @@ public class CreateTable extends JPanel {
 				dataTypeField2.setText("");
 				nullField2.setText("");
 				pKeyField.setText("");
+				nameFieldD.setText("");
 				
 			}
 		});
@@ -136,7 +140,7 @@ public class CreateTable extends JPanel {
 		
 		pKeyBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String name = nameFieldC.getText();
+				String name = nameFieldD.getText();
 				String pKey = pKeyField.getText();
 				
 				FormEvent ev = new FormEvent(this, name, pKey);
@@ -172,6 +176,8 @@ public class CreateTable extends JPanel {
 		add(nullLabel2);
 		add(nullField2);
 		add(addColumn);
+		add(name3);
+		add(nameFieldD);
 		add(pKeyLabel);
 		add(pKeyField);
 		add(pKeyBtn);

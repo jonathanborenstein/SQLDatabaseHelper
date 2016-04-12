@@ -32,16 +32,19 @@ public class CreateTable extends JPanel {
 	private JTextField nullField;
 	private JTextField nullField2;
 	
-	private JLabel numColumns;
-	private JTextField numColumnsField;
-	
-	private JButton okBtn;
 	private JButton createBtn;
+	private JButton clearBtn;
+	
 	private FormListener formListener;
 	private FormListener formListener2;
+	private FormListener formListener3;
+	
 	private JButton addColumn;
 	private JLabel name2;
 	private JTextField nameFieldC;
+	private JLabel pKeyLabel;
+	private JTextField pKeyField;
+	private JButton pKeyBtn;
 	
 
 	
@@ -61,12 +64,18 @@ public class CreateTable extends JPanel {
 		column2 = new JLabel("Column: ");
 		nullLabel2 = new JLabel("Null or Not Null: "); 
 		
+		pKeyLabel = new JLabel("   Primary Key: ");
+		pKeyField = new JTextField(15);
+		pKeyBtn = new JButton("Add Primary Key");
+		
 		
 		nameFieldB = new JTextField(15);
 		nameFieldC = new JTextField(15);
 		dataTypeField = new JTextField(15);
 		columnField = new JTextField(15);
 		nullField = new JTextField(15);
+		
+		
 		
 		dataTypeField2 = new JTextField(15);
 		columnField2 = new JTextField(15);
@@ -75,6 +84,7 @@ public class CreateTable extends JPanel {
 		
 		createBtn = new JButton("Create Table");
 		addColumn = new JButton("Add Column");
+		clearBtn = new JButton("Clear Fields");
 	
 		
 		createBtn.addActionListener(new ActionListener() {
@@ -83,8 +93,6 @@ public class CreateTable extends JPanel {
 				String column = columnField.getText();
 				String data = dataTypeField.getText();
 				String nullF = nullField.getText();
-				
-				
 				
 				FormEvent ev = new FormEvent(this, name, column, data, nullF);
 				
@@ -95,14 +103,27 @@ public class CreateTable extends JPanel {
 			}
 		});
 		
+		clearBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nameFieldB.setText("");
+				columnField.setText("");
+				dataTypeField.setText("");
+				nullField.setText("");
+				nameFieldC.setText("");
+				columnField2.setText("");
+				dataTypeField2.setText("");
+				nullField2.setText("");
+				pKeyField.setText("");
+				
+			}
+		});
+		
 		addColumn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String name = nameFieldC.getText();
-				
 				String column= columnField2.getText();
 				String data = dataTypeField2.getText();
 				String nullF = nullField2.getText();
-				
 				
 				FormEvent ev = new FormEvent(this, name, column, data, nullF);
 				
@@ -113,7 +134,19 @@ public class CreateTable extends JPanel {
 			}
 		});
 		
-		
+		pKeyBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = nameFieldC.getText();
+				String pKey = pKeyField.getText();
+				
+				FormEvent ev = new FormEvent(this, name, pKey);
+				
+				if(formListener3 != null) {
+					formListener3.formEventOccurred(ev);
+				}
+				
+			}
+		});
 		
 		
 		Border innerBorder = BorderFactory.createTitledBorder("Create Table");
@@ -139,10 +172,11 @@ public class CreateTable extends JPanel {
 		add(nullLabel2);
 		add(nullField2);
 		add(addColumn);
-		
-	
+		add(pKeyLabel);
+		add(pKeyField);
+		add(pKeyBtn);
+		add(clearBtn);
 
-		
 	}
 	
 	public void setFormListener(FormListener listener) {
@@ -151,6 +185,10 @@ public class CreateTable extends JPanel {
 	
 	public void setFormListener2(FormListener listener) {
 		this.formListener2 = listener;
+	}
+	
+	public void setFormListener3(FormListener listener) {
+		this.formListener3 = listener;
 	}
 	
 }

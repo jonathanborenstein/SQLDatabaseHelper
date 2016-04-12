@@ -68,6 +68,18 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
+		
+		create.setFormListener3(new FormListener() {
+			public void formEventOccurred(FormEvent e) {
+				try {
+					db.setName(e.getName());
+					db.setCol(e.getPKey());
+					db.addPrimaryKey();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 
 		formPanel.setFormListener(new FormListener(){
 			public void formEventOccurred(FormEvent e) {
@@ -121,7 +133,7 @@ public class MainFrame extends JFrame {
 		add(toolbar, BorderLayout.NORTH);
 		add(create, BorderLayout.EAST);
 
-		setSize(1400, 700);
+		setSize(1400, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}

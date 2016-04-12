@@ -14,6 +14,8 @@ public class FormEvent extends EventObject {
 	private String password;
 	private String user;
 	
+	private String pKey;
+	
 	private char[] pass;
 	
 	public FormEvent(Object source) {
@@ -23,6 +25,12 @@ public class FormEvent extends EventObject {
 	public FormEvent(Object source, String tableName) {
 		super(source);
 		this.tableName = tableName;
+	}
+	
+	public FormEvent(Object source, String name, String pKey) {
+		super(source);
+		this.name = name;
+		this.pKey = pKey;
 	}
 	
 	public FormEvent(Object source, String url, String username, char[] pass) {
@@ -85,6 +93,10 @@ public class FormEvent extends EventObject {
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getPKey() {
+		return pKey;
 	}
 
 	public void setName(String name) {

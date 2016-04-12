@@ -128,6 +128,14 @@ public class Database {
 		System.out.println(sql);
 		pst.execute();
 	}
+	
+	public void addPrimaryKey() throws SQLException
+	{
+		String sql = "ALTER TABLE " + this.name + " ADD PRIMARY KEY(" + this.column1 + ")";
+		pst = con.prepareStatement(sql);
+		System.out.println(sql);
+		pst.execute();
+	}
 
 	public void insert() throws SQLException, ParseException
 	{

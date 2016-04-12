@@ -2,6 +2,7 @@ package SQL;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,12 +27,21 @@ public class Database {
 	private String dataType;
 	private PreparedStatement pst;
 	private Connection con;
-	private String name; 
+	private String name;
+	private String type;
+	private String s; 
 
+
+	
 
 	public void createConnection(String url, String user, String password) throws SQLException
 	{
 		con = DriverManager.getConnection(url, user, password);
+	}
+	
+	public Connection getCon()
+	{
+		return con;
 	}
 	
 	public void createTable() throws SQLException
@@ -96,20 +106,21 @@ public class Database {
 		pst.execute();
 	}
 
-	public void insert() throws SQLException, ParseException
+	public String insert() throws SQLException, ParseException
 	{
 		
 		String stm1 = "INSERT into " + table  + "(" + this.getColumnName(rs) + ") VALUES(" + this.returnMarks() + ")";
 		System.out.println(stm1);
-		pst = con.prepareStatement(stm1);
-		this.getColumnTypeName(rs);
-		pst.executeUpdate();
+		return stm1;
+		//pst = con.prepareStatement(stm1);
+		//this.getColumnTypeName();
+		//pst.executeUpdate();
 	}
 
 	public ResultSet orderBy() throws SQLException
 	{
-		this.chooseTable();
-		this.chooseColumn();
+		//this.chooseTable();
+		//this.chooseColumn();
 		Statement stmt = null;
 		stmt = con.createStatement();
 		String sql = "SELECT * FROM " + table + " ORDER BY " + column;
@@ -375,70 +386,38 @@ public class Database {
 		}
 	}
 	
-	private void getColumnTypeName(ResultSet rs) throws SQLException, ParseException
+	public ArrayList<String> getColumnTypeName() throws SQLException, ParseException
 	{
 		int j = 1;
-		String s = null;
+		s = null;
 		ArrayList<String> array4 = new ArrayList<String>();
 		for(int i =0; i < rs.getMetaData().getColumnCount(); i++)
 		{
 			array4.add(rs.getMetaData().getColumnTypeName(j));
-			System.out.println(array4.get(i));
-			String type = array4.get(i);
+			type = array4.get(i);
 			int a;
 			double d;
 			boolean b;
-
-			switch (type) {
-			case "INT": 
-				s = JOptionPane.showInputDialog("Enter a number");
-				a = Integer.parseInt(s);
-				pst.setInt(j, a);
-				break;
-
-			case "VARCHAR":
-				s = JOptionPane.showInputDialog("Enter a string");
-				pst.setString(j, s);
-				break;
-				
-
-			case "bpchar":
-				s = JOptionPane.showInputDialog("Enter a string");
-				pst.setString(j, s);
-				break;
-
-			case "text":
-				s = JOptionPane.showInputDialog("Enter a string");
-				pst.setString(j, s);
-				break;
-
-			case "numeric": 
-				s = JOptionPane.showInputDialog("Enter a number");
-				a = Integer.parseInt(s);
-				pst.setInt(j, a);
-				break;
-
-			case "bpnumeric": 
-				s = JOptionPane.showInputDialog("Enter a number");
-				a = Integer.parseInt(s);
-				pst.setInt(j, a);
-				break;
-
-			case "float8": 
-				s = JOptionPane.showInputDialog("Enter a double");
-				d = Double.parseDouble(s);
-				pst.setDouble(j, d);
-				break;
-
-			case "BOOLEAN": 
-				s = JOptionPane.showInputDialog("Enter true or false");
-				b = Boolean.parseBoolean(s);
-				pst.setBoolean(j, b);; 
-				break;
-
-			}
+			long date;
 			j++;
 		}
+		return array4;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public String getS() {
+		return s;
+	}
+
+	public void setS(String s) {
+		this.s = s;
 	}
 }
 

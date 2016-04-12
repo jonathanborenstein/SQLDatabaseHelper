@@ -23,12 +23,14 @@ public class FormPanel extends JPanel {
 	private FormListener formListener2;
 	private FormListener formListener3;
 	private FormListener formListener4;
+	private FormListener formListener5;
 
 	
 	private JList tableList;
 	
 	private JButton insertBtn;
 	private JButton insert2Btn;
+	private JButton insert3Btn;
 	private JButton refreshBtn;
 	private JButton clearPanel;
 	
@@ -48,6 +50,7 @@ public class FormPanel extends JPanel {
 
 		insertBtn = new JButton("Select Table");
 		insert2Btn = new JButton("Display Table");
+		insert3Btn = new JButton("Insert into Table");
 		clearPanel = new JButton("Clear Text Panel");
 		refreshBtn = new JButton("Refresh Table List");
 		
@@ -70,6 +73,17 @@ public class FormPanel extends JPanel {
 				
 				if(formListener2 != null) {
 					formListener2.formEventOccurred(ev);
+				}
+			}
+		});
+		
+		insert3Btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String tableName = (String) tableList.getSelectedValue();
+				FormEvent ev = new FormEvent(this, tableName);
+				
+				if(formListener5 != null) {
+					formListener5.formEventOccurred(ev);
 				}
 			}
 		});
@@ -105,6 +119,7 @@ public class FormPanel extends JPanel {
 		add(insertBtn);
 		add(insert2Btn);
 		add(refreshBtn);
+		add(insert3Btn);
 		add(clearPanel);
 
 
@@ -135,6 +150,11 @@ public class FormPanel extends JPanel {
 	
 	public void setFormListener4(FormListener listener) {
 		this.formListener4 = listener;
+		
+	}
+
+	public void setFormListener5(FormListener listener) {
+		this.formListener5 = listener;
 		
 	}
 	

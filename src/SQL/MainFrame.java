@@ -131,6 +131,7 @@ public class MainFrame extends JFrame {
 							s = JOptionPane.showInputDialog("Enter a double");
 							d = Double.parseDouble(s);
 							pst.setDouble(j, d);
+							break;
 
 						case "DATE": 
 							s = JOptionPane.showInputDialog("Enter a date");

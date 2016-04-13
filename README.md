@@ -12,6 +12,7 @@ One thing that is needed is a JDBC driver specific to the Database you use in or
 The program currently has these functions (although more will be added shortly):
 
 Connect Button: Provides a connection to your database.
+
 Select Table Button: Allows you to select a table from the database, which then can be viewed in the TextPanel via the Display Table button.
 
 Insert Button: Once a table is selected, you can use this function to insert a new entry into a specific table in your database. You do not need to know the column names or datatypes or SQL syntax, as this is provided for you.

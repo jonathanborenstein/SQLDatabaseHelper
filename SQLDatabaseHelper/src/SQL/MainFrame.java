@@ -53,7 +53,6 @@ public class MainFrame extends JFrame {
 			try {
 				db.createTable();
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
